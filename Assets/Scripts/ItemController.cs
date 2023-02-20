@@ -4,14 +4,29 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
-    private Camera mainCamera;             //メインカメラ取得
-    private float piecePosZ;               //ピースのZ座標
+    /*
+     * Itemが持つ要素
+     * 
+     * ・アイテム名 (CSVから取得)
+     * ・アイテム画像
+     * ・現在の状態 (選択中・かざしている・何もない)
+     * ・初期位置
+     * 
+     * ------------
+     * 
+     * TODO:
+     * ・Itemクラス作る
+     */
 
     // Start is called before the first frame update
     void Start()
     {
-        mainCamera = Camera.main;
-        piecePosZ = transform.position.z;
+        
+    }
+
+    private void GetItemData()
+    {
+        // TODO: CSVからデータ全てとってくる
     }
 
     /*

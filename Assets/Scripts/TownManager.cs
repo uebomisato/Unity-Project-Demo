@@ -110,7 +110,7 @@ public class TownManager : MonoBehaviour
     /// <summary>
     /// 動いてない
     /// </summary>
-    /*
+    
     void OnMouseDrag()
     {
         Debug.Log("テスト");
@@ -127,9 +127,9 @@ public class TownManager : MonoBehaviour
         Vector3 objectWorldPoint = Camera.main.ScreenToWorldPoint(objectScreenPoint);
 
         //オブジェクトの座標を変更する
-        gameObjectTransform.position = objectWorldPoint;
+        this.transform.position = objectWorldPoint;
 
-        sampleText.text = gameObjectTransform.position.ToString();
+        sampleText.text = this.transform.position.ToString();
     }
-    */
+    
 }
