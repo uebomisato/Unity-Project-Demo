@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Town.unity
+    guid: c7219c10c24fa49e1a71b59bf6b175fd
+  - enabled: 1
+    path: Assets/Scenes/Mission.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/ReadCSV.unity
+    guid: b15b474ed97f541208ea7a2bdd306f2b
   m_configObjects: {}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SceneManager : MonoBehaviour
+public class ReadCSVSceneManager : MonoBehaviour
 {
     private QuestionsInfomation questionsInfomation;
 
@@ -18,6 +18,11 @@ public class SceneManager : MonoBehaviour
         questionsInfomation = new QuestionsInfomation();
         questionsInfomation.Init();
         GetQuestion();
+    }
+
+    internal static void LoadScene(string v)
+    {
+        throw new System.NotImplementedException();
     }
 
     // Update is called once per frame
