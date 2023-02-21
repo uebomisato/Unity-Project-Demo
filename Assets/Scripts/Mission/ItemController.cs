@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public class ItemController : MonoBehaviour
@@ -8,6 +10,7 @@ public class ItemController : MonoBehaviour
      * Itemが持つ要素
      * 
      * ・アイテム名 (CSVから取得)
+     * ・アイテムの説明文 (かざしている時に表示)
      * ・アイテム画像
      * ・現在の状態 (選択中・かざしている・何もない)
      * ・初期位置
@@ -18,12 +21,37 @@ public class ItemController : MonoBehaviour
      * ・Itemクラス作る
      */
 
+    enum State {
+        None, 　// 何もしていない
+        Select, // 選択された
+        Pick    // 摘む
+    }
+
+    State state = State.None;
+
+
+    [SerializeField]
+    MissionManager missionManager;
+
     private Vector3 screenPoint;
 
-    // Start is called before the first frame update
+    /*
+    private BoolReactiveProperty _isStayCursor = new BoolReactiveProperty();
+    public IObservable<bool> IsStayCursor
+    {
+        get { return _isStayCursor.Where(c => c == true); }
+    }
+    */
+
     void Start()
     {
-        
+        missionManager.IsStayCursor.Subscribe(_ => {
+            Observable.Timer(TimeSpan.FromSeconds(3)).Subscribe(_ =>
+            {
+                
+                Debug.Log("3秒たった");
+            }).AddTo(this);
+        }).AddTo(this);
     }
 
     private void GetItemData()
@@ -31,23 +59,9 @@ public class ItemController : MonoBehaviour
         // TODO: CSVからデータ全てとってくる
     }
 
-    /*
-    //ドラッグ処理
-    private void OnMouseDrag()
-    {
-        //マウスのポジションを取得してピースZ座標を代入しておく
-        Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = piecePosZ;
-
-        //ドラッグ中のピースにマウス座標を代入する
-        transform.position = mousePos;
-    }
-    */
-
     /// <summary>
-    /// 動いてない
+    /// アイテムをドラッグする
     /// </summary>
-
     void OnMouseDrag()
     {
         // カーソル位置を取得
@@ -57,10 +71,14 @@ public class ItemController : MonoBehaviour
         // カーソル位置をワールド座標に変換
         Vector3 target = Camera.main.ScreenToWorldPoint(mousePosition);
 
-
-        //Vector3 currentScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-        //Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenPoint);
         this.gameObject.transform.position = target;
-        //Debug.Log("target: " + target);
+    }
+
+    /// <summary>
+    /// アイテムにカーソルが合っている時にアイテムの説明文を表示
+    /// </summary>
+    void ItemDescription()
+    {
+
     }
 }

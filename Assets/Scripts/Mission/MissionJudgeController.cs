@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class MissionController : MonoBehaviour
+public class MissionJudgeController : MonoBehaviour
 {
     private string itemTag = "Item";
 
