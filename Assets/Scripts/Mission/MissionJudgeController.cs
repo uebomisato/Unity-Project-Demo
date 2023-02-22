@@ -11,20 +11,10 @@ public class MissionJudgeController : MonoBehaviour
     [SerializeField]
     BoxCollider2D characterCollider;
 
-    /// <summary>
-    /// ミッション画面での回答内容のScore保持
-    /// </summary>
-    IntReactiveProperty score = new IntReactiveProperty(0);
-    public int Score { get { return score.Value; } }
-
-    /// <summary>
-    /// ミッションが完了したらtrueにするbool
-    /// </summary>
-    private BoolReactiveProperty _missionEnd = new BoolReactiveProperty(false);
-
-    public IObservable<bool> OnMissionEnd
+    int _score = 0;
+    public int Score
     {
-        get { return _missionEnd.Where(b => b == true); }
+        get { return _score; }
     }
 
     // Start is called before the first frame update
@@ -50,8 +40,7 @@ public class MissionJudgeController : MonoBehaviour
             {
                 Debug.Log("正解だよ！");
                 Debug.Log("------------------------------");
-                score.Value += 1;
-                _missionEnd.Value = true;
+                _score += 1;
 
             }
             else

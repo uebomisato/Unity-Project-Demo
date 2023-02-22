@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemController : MonoBehaviour
 {
@@ -29,53 +30,34 @@ public class ItemController : MonoBehaviour
 
     State state = State.None;
 
+    float time = 0.0f;
+    public static bool beingMeasured; // 計測中であることを表す変数
+    private bool isMoving;
 
     [SerializeField]
     MissionManager missionManager;
 
-    private Vector3 screenPoint;
+    [SerializeField]
+    GameObject hukidashi;
 
-    /*
-    private BoolReactiveProperty _isStayCursor = new BoolReactiveProperty();
-    public IObservable<bool> IsStayCursor
-    {
-        get { return _isStayCursor.Where(c => c == true); }
-    }
-    */
+    private String description;
+
 
     void Start()
     {
-        //TODO:
-        //・3秒経ったらState.Selectにする
-        /*
-        missionManager.IsStayCursor.Subscribe(_ => {
-            Observable.Timer(TimeSpan.FromSeconds(3))
-            .Subscribe(_ =>
-            {
-                Debug.Log("3秒たった");
-                state = State.Select;
+        beingMeasured = false;
+        isMoving = false;
+        hukidashi.SetActive(false);
+        description = this.gameObject.name + "の説明文です！";
+    }
 
-            }).AddTo(this);
-        }).AddTo(this);
-        */
-
-
-        //・説明文の表示をする
-
-        /*
-        missionManager.IsStayCursor.Subscribe(_ => {
-            Observable.Timer(TimeSpan.FromSeconds(3))
-            .First(_ => missionManager.itemName.Value == this.gameObject.name)
-            .DistinctUntilChanged()
-            .Subscribe(_ =>
-            {
-                Debug.Log("3秒たった");
-                state = State.Select;
-            }).AddTo(this);
-        }).AddTo(this);
-        */
-
-        //ItemDescription(missionManager.itemName.Value);
+    private void Update()
+    {
+        if (!beingMeasured)
+        {
+            time = 0.0f;
+        }
+        time += Time.deltaTime;
     }
 
     private void GetItemData()
@@ -88,6 +70,9 @@ public class ItemController : MonoBehaviour
     /// </summary>
     void OnMouseDrag()
     {
+        isMoving = true;
+        beingMeasured = false;
+        HideItemDescription();
         // カーソル位置を取得
         Vector3 mousePosition = Input.mousePosition;
         // カーソル位置のz座標を10に
@@ -101,14 +86,42 @@ public class ItemController : MonoBehaviour
     /// <summary>
     /// アイテムにカーソルが合っている時にアイテムの説明文を表示
     /// </summary>
-    void ItemDescription(String description)
+    /// 
+    public void ItemDescription(String description)
     {
-        missionManager.ShowDescription(description);
+        hukidashi.GetComponentInChildren<Text>().text = description;
     }
 
-    //マウスが乗った時
-    void OnMouseEnter()
+    public void HideItemDescription()
     {
-        Debug.Log("OnMouseEnter");
+        hukidashi.SetActive(false);
     }
+
+
+    /// <summary>
+    /// アイテムにカーソルを2秒以上置いていた時にアイテムの説明文を表示
+    /// </summary>
+    void OnMouseOver()
+    {
+        beingMeasured = true;
+
+        if (time >= 3.0f && !isMoving)
+        {
+            beingMeasured = false;
+            //time = 0f;
+            hukidashi.SetActive(true);
+            ItemDescription("アイテム名: " + this.gameObject.name + " / 説明文: 説明文説明文説明文説明文説明文説明文説明文");
+        }
+    }
+
+    /// <summary>
+    /// アイテムからカーソルが離れた時にアイテムの説明文を非表示
+    /// </summary>
+    void OnMouseExit()
+    {
+        beingMeasured = false;
+        isMoving = false;
+        hukidashi.SetActive(false);
+    }
+
 }
