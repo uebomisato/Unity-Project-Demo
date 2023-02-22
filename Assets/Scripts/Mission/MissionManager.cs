@@ -9,6 +9,7 @@ using System;
 
 public class MissionManager : MonoBehaviour
 {
+
     [SerializeField]
     Text sampleText;
 
@@ -31,8 +32,8 @@ public class MissionManager : MonoBehaviour
     [SerializeField]
     MissionJudgeController missionJudgeController;
 
-
-    private BoolReactiveProperty _isStayCursor = new BoolReactiveProperty();
+    public ReactiveProperty<string> itemName = new ReactiveProperty<string>();
+    public BoolReactiveProperty _isStayCursor = new BoolReactiveProperty();
     public IObservable<bool> IsStayCursor
     {
         get { return _isStayCursor.Where(c => c == true); }
@@ -57,10 +58,12 @@ public class MissionManager : MonoBehaviour
         //レイヤーマスク作成
         //int layerId = LayerMask.NameToLayer("Item");
 
+        int mask = LayerMask.GetMask(new string[] { "Item" });
+
         //Rayの長さ
         float maxDistance = 100;
 
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)ray.origin, (Vector2)ray.direction, maxDistance);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)ray.origin, (Vector2)ray.direction, maxDistance, mask);
 
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red, 5);
 
@@ -68,8 +71,11 @@ public class MissionManager : MonoBehaviour
         if (hit.collider)
         {
             Debug.Log(hit.collider.gameObject.name);
+            itemName.Value = hit.collider.gameObject.name;
             _isStayCursor.Value = true;
         }
+
+        _isStayCursor.Value = false;
     }
 
     void SetTownPoint()
@@ -80,5 +86,10 @@ public class MissionManager : MonoBehaviour
     public void BackTownArea()
     {
         SceneManager.LoadScene("Town");
+    }
+
+    public void ShowDescription(String description)
+    {
+        sampleText.text = description;
     }
 }

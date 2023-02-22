@@ -45,13 +45,37 @@ public class ItemController : MonoBehaviour
 
     void Start()
     {
+        //TODO:
+        //・3秒経ったらState.Selectにする
+        /*
         missionManager.IsStayCursor.Subscribe(_ => {
-            Observable.Timer(TimeSpan.FromSeconds(3)).Subscribe(_ =>
+            Observable.Timer(TimeSpan.FromSeconds(3))
+            .Subscribe(_ =>
             {
-                
                 Debug.Log("3秒たった");
+                state = State.Select;
+
             }).AddTo(this);
         }).AddTo(this);
+        */
+
+
+        //・説明文の表示をする
+
+        /*
+        missionManager.IsStayCursor.Subscribe(_ => {
+            Observable.Timer(TimeSpan.FromSeconds(3))
+            .First(_ => missionManager.itemName.Value == this.gameObject.name)
+            .DistinctUntilChanged()
+            .Subscribe(_ =>
+            {
+                Debug.Log("3秒たった");
+                state = State.Select;
+            }).AddTo(this);
+        }).AddTo(this);
+        */
+
+        //ItemDescription(missionManager.itemName.Value);
     }
 
     private void GetItemData()
@@ -77,8 +101,14 @@ public class ItemController : MonoBehaviour
     /// <summary>
     /// アイテムにカーソルが合っている時にアイテムの説明文を表示
     /// </summary>
-    void ItemDescription()
+    void ItemDescription(String description)
     {
+        missionManager.ShowDescription(description);
+    }
 
+    //マウスが乗った時
+    void OnMouseEnter()
+    {
+        Debug.Log("OnMouseEnter");
     }
 }
