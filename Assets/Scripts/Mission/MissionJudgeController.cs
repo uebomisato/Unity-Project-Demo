@@ -7,6 +7,7 @@ using UnityEngine;
 public class MissionJudgeController : MonoBehaviour
 {
     private string itemTag = "Item";
+    private string tutorialItemTag = "tutorialItem";
 
     [SerializeField]
     BoxCollider2D characterCollider;
@@ -16,6 +17,13 @@ public class MissionJudgeController : MonoBehaviour
     {
         get { return _score; }
     }
+
+    bool _isClear = false;
+    public bool  IsClear
+    {
+        get { return _isClear; }
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,10 +38,11 @@ public class MissionJudgeController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+
+        Debug.Log("持ってきたアイテム名: " + other.gameObject.name);
+
         if (other.gameObject.CompareTag(itemTag))
         {
-            Debug.Log("持ってきたアイテム名: " + other.gameObject.name);
-
             // TODO:
             // csvデータの「回答」絡むの文字と一致したら正解判定にする
             if (other.gameObject.name == "item1")
@@ -48,6 +57,12 @@ public class MissionJudgeController : MonoBehaviour
                 Debug.Log("違うアイテムを選んでね");
                 Debug.Log("------------------------------");
             }
+        }
+
+        if (other.gameObject.CompareTag(tutorialItemTag))
+        {
+            _isClear = true;
+            Debug.Log("_isClear: " + _isClear);
         }
     }
 }
