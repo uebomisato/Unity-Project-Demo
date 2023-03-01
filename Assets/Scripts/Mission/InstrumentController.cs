@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialItemController : MonoBehaviour
+public class InstrumentController : MonoBehaviour
 {
     [SerializeField]
     MissionJudgeController missionJudgeController;
@@ -43,7 +43,7 @@ public class TutorialItemController : MonoBehaviour
     {
         if (missionJudgeController.IsClear)
         {
-            missionManager.ShowText();
+            missionManager.ShowStoryText();
             this.gameObject.SetActive(false);
         }
     }
@@ -53,7 +53,7 @@ public class TutorialItemController : MonoBehaviour
     {
         if (!_firstClick)
         {
-            missionManager.ShowText();
+            missionManager.ShowStoryText();
             _firstClick = true;
         }
     }

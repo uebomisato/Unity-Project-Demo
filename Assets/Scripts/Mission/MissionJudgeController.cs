@@ -7,16 +7,16 @@ using UnityEngine;
 public class MissionJudgeController : MonoBehaviour
 {
     private string itemTag = "Item";
-    private string tutorialItemTag = "tutorialItem";
+    private string tutorialItemTag = "Instrument";
 
     [SerializeField]
     BoxCollider2D characterCollider;
 
-    int _score = 0;
-    public int Score
-    {
-        get { return _score; }
-    }
+    //int _score = 0;
+    //public int Score
+    //{
+    //    get { return _score; }
+    //}
 
     bool _isClear = false;
     public bool  IsClear
@@ -38,7 +38,7 @@ public class MissionJudgeController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
+        /*
         Debug.Log("持ってきたアイテム名: " + other.gameObject.name);
 
         if (other.gameObject.CompareTag(itemTag))
@@ -58,7 +58,7 @@ public class MissionJudgeController : MonoBehaviour
                 Debug.Log("------------------------------");
             }
         }
-
+        */
         if (other.gameObject.CompareTag(tutorialItemTag))
         {
             _isClear = true;
