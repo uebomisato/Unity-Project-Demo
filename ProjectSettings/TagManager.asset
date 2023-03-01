@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Item
-  - tutorialItem
+  - Instrument
+  - Option
   layers:
   - Default
   - TransparentFX
