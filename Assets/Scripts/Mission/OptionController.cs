@@ -38,11 +38,11 @@ public class OptionController : MonoBehaviour
     MissionManager missionManager;
 
 
-    string _optionName;
-    public string OptionName
-    {
-        get { return _optionName; }
-    }
+    //string _optionName;
+    //public string OptionName
+    //{
+    //    get { return _optionName; }
+    //}
 
     [SerializeField]
     int _score;
@@ -60,7 +60,7 @@ public class OptionController : MonoBehaviour
     int optionId;
 
     [SerializeField]
-    Text optionName;
+    public Text optionName;
 
     private String description;
 

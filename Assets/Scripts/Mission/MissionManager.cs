@@ -34,8 +34,6 @@ public class MissionManager : MonoBehaviour
     [SerializeField]
     MissionJudgeController missionJudgeController;
 
-    [SerializeField]
-    ReadCSVSceneManager ReadCSVSceneManager;
     private QuestionsInfomation questionsInfomation;
 
 
@@ -53,18 +51,34 @@ public class MissionManager : MonoBehaviour
     int _textCount = 0;
     bool _isShowOptionArea = false;
 
+
+    int before_index = 0;
+    int now_index;
+
     public static bool beingMeasured; // 計測中であることを表す変数
 
     void Start()
     {
-        //optionArea.SetActive(_isShowOptionArea);
-        //anser.SetActive(false);
+        optionArea.SetActive(_isShowOptionArea);
+        anser.SetActive(_isShowOptionArea);
         ShowStoryText();
 
-        ReadCSVSceneManager.init();
-        questionsInfomation = ReadCSVSceneManager.GetQuestions();
+        questionsInfomation = new QuestionsInfomation();
+        questionsInfomation.Init();
 
-        SetOptionsAndAnser(0);
+        List<string[]> csvDataList = questionsInfomation.QuizList;
+        int quizListCount = csvDataList.Count;
+
+        bool loop = true;
+        while (loop)
+        {
+            now_index = UnityEngine.Random.Range(1, quizListCount);
+            if (before_index == now_index) continue;
+            before_index = now_index;
+            loop = false;
+        }
+
+        SetOptionsAndAnser(questionsInfomation, now_index);
     }
 
     private void Update()
@@ -80,12 +94,12 @@ public class MissionManager : MonoBehaviour
     /// 選択肢3つと正解の値をセット
     /// </summary>
     /// <param name="num"></param>
-    public void SetOptionsAndAnser(int num)
+    public void SetOptionsAndAnser(QuestionsInfomation questions , int num)
     {
-        QuestionData.Instance.SetOption1(questionsInfomation.options1[num]);
-        QuestionData.Instance.SetOption2(questionsInfomation.options2[num]);
-        QuestionData.Instance.SetOption3(questionsInfomation.options3[num]);
-        QuestionData.Instance.SetAnser(questionsInfomation.Answer[num]);
+        QuestionData.Instance.SetOption1(questions.Options1[num]);
+        QuestionData.Instance.SetOption2(questions.Options2[num]);
+        QuestionData.Instance.SetOption3(questions.Options3[num]);
+        QuestionData.Instance.SetAnser(questions.Answer[num]);
     }
 
     /// <summary>
@@ -95,34 +109,14 @@ public class MissionManager : MonoBehaviour
     {
         if (_textCount == talkingTextList.Count -2)
         {
-            //ShowOptionArea();
-            MoveOptionArea();
+            ShowOptionArea();
+            //MoveOptionArea();
         }
 
         if (_textCount != talkingTextList.Count)
         {
             charactorText.text = talkingTextList[_textCount];
             _textCount += 1;
-        }
-    }
-
-    public void MoveOptionArea()
-    {
-        Vector3 o = optionArea.GetComponent<Transform>().transform.position;
-        optionArea.GetComponent<Transform>().transform.position = new Vector3(o.x, 0, o.z);
-
-        Vector3 a = anser.GetComponent<Transform>().transform.position;
-        anser.GetComponent<Transform>().transform.position = new Vector3(a.x, 0, a.z);
-
-        Transform children = optionArea.GetComponentInChildren<Transform>();
-        foreach (Transform ob in children)
-        {
-            // "Option"タグがついていないオブジェクトの場合はcontinueする
-            if (!ob.gameObject.CompareTag("Option")) continue;
-
-            // 各選択肢のオブジェクトの"IsSelected"がtrueではない場合はcontinueする
-            OptionController optionController = ob.GetComponent<OptionController>();
-            optionController.GetItemData();
         }
     }
 
@@ -134,6 +128,17 @@ public class MissionManager : MonoBehaviour
         _isShowOptionArea = !_isShowOptionArea;
         optionArea.SetActive(_isShowOptionArea);
         anser.SetActive(_isShowOptionArea);
+
+        Transform children = optionArea.GetComponentInChildren<Transform>();
+        foreach (Transform ob in children)
+        {
+            // "Option"タグがついていないオブジェクトの場合はcontinueする
+            if (!ob.gameObject.CompareTag("Option")) continue;
+
+            // 各選択肢のオブジェクトの"IsSelected"がtrueではない場合はcontinueする
+            OptionController optionController = ob.GetComponent<OptionController>();
+            optionController.GetItemData();
+        }
     }
 
     /// <summary>
@@ -154,7 +159,7 @@ public class MissionManager : MonoBehaviour
             if (!optionController.IsSelected) continue;
 
             // 選んだ選択肢の中央に表示、テキストも差し替え
-            anser.GetComponentInChildren<Text>().text = optionController.OptionName;
+            anser.GetComponentInChildren<Text>().text = optionController.optionName.text;
 
             ShowStoryText();
             SetTownPoint(ob.GetComponent<OptionController>().Score);
