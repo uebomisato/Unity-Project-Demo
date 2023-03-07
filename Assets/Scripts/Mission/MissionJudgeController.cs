@@ -18,7 +18,7 @@ public class MissionJudgeController : MonoBehaviour
     //    get { return _score; }
     //}
 
-    bool _isClear = false;
+    bool _isClear;
     public bool  IsClear
     {
         get { return _isClear; }
@@ -28,6 +28,7 @@ public class MissionJudgeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _isClear = false;
     }
 
     // Update is called once per frame

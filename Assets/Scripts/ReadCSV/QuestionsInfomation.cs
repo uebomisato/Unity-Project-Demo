@@ -50,22 +50,8 @@ public class QuestionsInfomation
         }
     }
 
-    public QuestionAndOptions hoge()
+    public void Reset()
     {
-        CsvReader();//enemyDataへ情報を一時格納
-
-        var hoge = new QuestionAndOptions();
-
-        //各変数へデータを格納
-        for (int i = 1; i < csvDatas.Count; i++)//エネミーIDが記述された最後まで読み込み。一行目はタイトルなのでi=0はデータとして扱わない
-        {
-            hoge.Question = csvDatas[i][0];
-            hoge.Option1 = csvDatas[i][1];
-            hoge.Option2 = csvDatas[i][2];
-            hoge.Option3 = csvDatas[i][3];
-            hoge.Answer = csvDatas[i][4];
-        }
-
-        return hoge;
+        csvDatas.Clear();
     }
 }

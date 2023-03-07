@@ -34,7 +34,7 @@ public class ReadCSVSceneManager : MonoBehaviour
     public void init()
     {
         questionsInfomation = new QuestionsInfomation();
-        questionsInfomation.SetQuestion;
+        questionsInfomation.Init();
     }
 
     public void GetQuestion()

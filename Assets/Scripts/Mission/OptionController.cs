@@ -60,7 +60,7 @@ public class OptionController : MonoBehaviour
     int optionId;
 
     [SerializeField]
-    public Text optionName;
+    Text optionName;
 
     private String description;
 
@@ -95,17 +95,17 @@ public class OptionController : MonoBehaviour
         if (optionId == 1)
         {
             optionName.text = QuestionData.Instance.Option1;
-            Debug.Log(QuestionData.Instance.Option1);
+            //Debug.Log(QuestionData.Instance.Option1);
         }
         else if (optionId == 2)
         {
             optionName.text = QuestionData.Instance.Option2;
-            Debug.Log(QuestionData.Instance.Option2);
+            //Debug.Log(QuestionData.Instance.Option2);
         }
         else if (optionId == 3)
         {
             optionName.text = QuestionData.Instance.Option3;
-            Debug.Log(QuestionData.Instance.Option3);
+            //Debug.Log(QuestionData.Instance.Option3);
         }
     }
 
@@ -156,7 +156,7 @@ public class OptionController : MonoBehaviour
             //hukidashi.SetActive(true);
             //ItemDescription("アイテム名: " + this.gameObject.name + " / 説明文: 説明文説明文説明文説明文説明文説明文説明文");
             _isSelected = true;
-            missionManager.SelectedAnser();
+            missionManager.SelectedAnser(optionName.text);
         }
     }
 

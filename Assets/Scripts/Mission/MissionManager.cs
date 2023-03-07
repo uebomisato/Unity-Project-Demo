@@ -46,8 +46,6 @@ public class MissionManager : MonoBehaviour
     [SerializeField]
     Text charactorText;
 
-    Dictionary<int, string> dic = new Dictionary<int, string>();
-
     int _textCount = 0;
     bool _isShowOptionArea = false;
 
@@ -64,21 +62,32 @@ public class MissionManager : MonoBehaviour
         ShowStoryText();
 
         questionsInfomation = new QuestionsInfomation();
+        questionsInfomation.Reset();
         questionsInfomation.Init();
 
         List<string[]> csvDataList = questionsInfomation.QuizList;
         int quizListCount = csvDataList.Count;
+        Debug.Log("quizListCount: " + quizListCount);
 
         bool loop = true;
         while (loop)
         {
             now_index = UnityEngine.Random.Range(1, quizListCount);
-            if (before_index == now_index) continue;
+            if (UserData.Instance.QuestionDataBeforeNum == now_index) continue;
+
+            Debug.Log("now_index: " + now_index + " / before_index: " + UserData.Instance.QuestionDataBeforeNum);
+
             before_index = now_index;
+
+            UserData.Instance.SetQuestionBeforeNum(before_index);
+
+            Debug.Log("差し替え後　now_index: " + now_index + " / before_index: " + UserData.Instance.QuestionDataBeforeNum);
             loop = false;
         }
 
-        SetOptionsAndAnser(questionsInfomation, now_index);
+        QuestionAndOptions question = new QuestionAndOptions(questionsInfomation.Question[now_index] , questionsInfomation.Options1[now_index], questionsInfomation.Options2[now_index], questionsInfomation.Options3[now_index], questionsInfomation.Answer[now_index]);
+
+        SetOptionsAndAnser(question);
     }
 
     private void Update()
@@ -94,12 +103,12 @@ public class MissionManager : MonoBehaviour
     /// 選択肢3つと正解の値をセット
     /// </summary>
     /// <param name="num"></param>
-    public void SetOptionsAndAnser(QuestionsInfomation questions , int num)
+    public void SetOptionsAndAnser(QuestionAndOptions question)
     {
-        QuestionData.Instance.SetOption1(questions.Options1[num]);
-        QuestionData.Instance.SetOption2(questions.Options2[num]);
-        QuestionData.Instance.SetOption3(questions.Options3[num]);
-        QuestionData.Instance.SetAnser(questions.Answer[num]);
+        QuestionData.Instance.SetOption1(question.Option1);
+        QuestionData.Instance.SetOption2(question.Option2);
+        QuestionData.Instance.SetOption3(question.Option3);
+        QuestionData.Instance.SetAnser(question.Answer);
     }
 
     /// <summary>
@@ -110,7 +119,6 @@ public class MissionManager : MonoBehaviour
         if (_textCount == talkingTextList.Count -2)
         {
             ShowOptionArea();
-            //MoveOptionArea();
         }
 
         if (_textCount != talkingTextList.Count)
@@ -144,7 +152,7 @@ public class MissionManager : MonoBehaviour
     /// <summary>
     /// 選択肢選んだ後の処理
     /// </summary>
-    public void SelectedAnser()
+    public void SelectedAnser(string optionName)
     {
         Transform children = optionArea.GetComponentInChildren<Transform>();
         optionArea.SetActive(false);
@@ -159,10 +167,12 @@ public class MissionManager : MonoBehaviour
             if (!optionController.IsSelected) continue;
 
             // 選んだ選択肢の中央に表示、テキストも差し替え
-            anser.GetComponentInChildren<Text>().text = optionController.optionName.text;
+            anser.GetComponentInChildren<Text>().text = optionName;
 
             ShowStoryText();
+            // ポイントをセット
             SetTownPoint(ob.GetComponent<OptionController>().Score);
+            // エリアへ戻る
             StartCoroutine(BackAreaDelay());
         }
     }
@@ -173,6 +183,7 @@ public class MissionManager : MonoBehaviour
     /// <param name="Score"></param>
     void SetTownPoint(int Score)
     {
+        Score = UserData.Instance.TownScore + Score;
         UserData.Instance.SetTownScore(Score);
     }
 

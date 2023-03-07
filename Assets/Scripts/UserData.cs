@@ -44,20 +44,16 @@ public class UserData
     public int NatureScore { get { return natureScore.Value; } }
 
 
+    IntReactiveProperty questionDataBeforeNum = new IntReactiveProperty(0);
+    public int QuestionDataBeforeNum { get { return questionDataBeforeNum.Value; } }
+
+
     /// <summary>
     /// コンストラクタ
     /// </summary>
     UserData()
     {
         disposeBag = new CompositeDisposable();
-
-        /*
-         * 例) 尼崎城の時の最終スコア計算
-        Observable.Merge(gameScore1.DistinctUntilChanged(), gameScore2.DistinctUntilChanged(), gameScore3.DistinctUntilChanged(), gameScore4.DistinctUntilChanged())
-            .Select(_ => gameScore1.Value + gameScore2.Value + gameScore3.Value + gameScore4.Value)
-            .Subscribe(v => fullScore.Value = v)
-            .AddTo(disposeBag);
-        */
     }
     /// <summary>
     /// デストラクタ (Object削除した時に動く)
@@ -84,5 +80,10 @@ public class UserData
     public void SetNatureScore(int score)
     {
         this.natureScore.Value = score;
+    }
+
+    public void SetQuestionBeforeNum(int num)
+    {
+        this.questionDataBeforeNum.Value = num;
     }
 }
