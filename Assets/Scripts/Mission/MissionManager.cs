@@ -55,6 +55,8 @@ public class MissionManager : MonoBehaviour
 
     public static bool beingMeasured; // 計測中であることを表す変数
 
+    OptionData[] optionData;
+
     void Start()
     {
         optionArea.SetActive(_isShowOptionArea);
@@ -62,32 +64,41 @@ public class MissionManager : MonoBehaviour
         ShowStoryText();
 
         questionsInfomation = new QuestionsInfomation();
-        questionsInfomation.Reset();
-        questionsInfomation.Init();
+        questionsInfomation.Reset(questionsInfomation.QuizList);
+        questionsInfomation.QuestionInit();
 
         List<string[]> csvDataList = questionsInfomation.QuizList;
         int quizListCount = csvDataList.Count;
         Debug.Log("quizListCount: " + quizListCount);
 
+
+        for (int i = 1; i < quizListCount; i++)
+        {
+            if (int.Parse(questionsInfomation.MissionId[i]) != 2) continue;
+
+            optionData[i].id = int.Parse(questionsInfomation.Id[i]);
+            optionData[i].option = questionsInfomation.Option[i];
+            optionData[i].missionId = int.Parse(questionsInfomation.MissionId[i]);
+            optionData[i].anserRank = questionsInfomation.AnserRank[i];
+            optionData[i].score = int.Parse(questionsInfomation.Score[i]);
+        }
+
+        /*
         bool loop = true;
         while (loop)
         {
-            now_index = UnityEngine.Random.Range(1, quizListCount);
+            //now_index = UnityEngine.Random.Range(1, quizListCount);
+            now_index = UnityEngine.Random.Range(1, 3);
+
             if (UserData.Instance.QuestionDataBeforeNum == now_index) continue;
-
-            Debug.Log("now_index: " + now_index + " / before_index: " + UserData.Instance.QuestionDataBeforeNum);
-
             before_index = now_index;
-
             UserData.Instance.SetQuestionBeforeNum(before_index);
-
-            Debug.Log("差し替え後　now_index: " + now_index + " / before_index: " + UserData.Instance.QuestionDataBeforeNum);
             loop = false;
         }
+        */
 
-        QuestionAndOptions question = new QuestionAndOptions(questionsInfomation.Question[now_index] , questionsInfomation.Options1[now_index], questionsInfomation.Options2[now_index], questionsInfomation.Options3[now_index], questionsInfomation.Answer[now_index]);
 
-        SetOptionsAndAnser(question);
+        SetOptionsAndAnser(optionData);
     }
 
     private void Update()
@@ -103,12 +114,12 @@ public class MissionManager : MonoBehaviour
     /// 選択肢3つと正解の値をセット
     /// </summary>
     /// <param name="num"></param>
-    public void SetOptionsAndAnser(QuestionAndOptions question)
+    public void SetOptionsAndAnser(OptionData[] question)
     {
-        QuestionData.Instance.SetOption1(question.Option1);
-        QuestionData.Instance.SetOption2(question.Option2);
-        QuestionData.Instance.SetOption3(question.Option3);
-        QuestionData.Instance.SetAnser(question.Answer);
+        QuestionData.Instance.SetOption1(question[0].option);
+        QuestionData.Instance.SetOption2(question[1].option);
+        QuestionData.Instance.SetOption3(question[2].option);
+        //QuestionData.Instance.SetAnser(question.Answer);
     }
 
     /// <summary>

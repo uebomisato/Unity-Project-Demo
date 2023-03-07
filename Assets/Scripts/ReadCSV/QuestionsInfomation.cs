@@ -12,15 +12,23 @@ public class QuestionsInfomation
         get { return csvDatas; }
     }
 
+    /*
     public string[] Question = new string[100];
     public string[] Options1 = new string[100];
     public string[] Options2 = new string[100];
     public string[] Options3 = new string[100];
     public string[] Answer = new string[100];
+    */
 
-    static void CsvReader()
+    public string[] Id = new string[100];
+    public string[] Option = new string[100];
+    public string[] MissionId = new string[100];
+    public string[] AnserRank = new string[100];
+    public string[] Score = new string[100];
+
+    static void CsvReader(string csvDataName)
     {
-        csvFile = Resources.Load("Questions") as TextAsset; // Resouces下のCSV読み込み
+        csvFile = Resources.Load(csvDataName) as TextAsset; // Resouces下のCSV読み込み
         StringReader reader = new StringReader(csvFile.text);
 
         // , で分割しつつ一行ずつ読み込み
@@ -35,23 +43,30 @@ public class QuestionsInfomation
         //Debug.Log(csvDatas[0][1]);
     }
 
-    public void Init()
+    public void QuestionInit()
     {
-        CsvReader();//enemyDataへ情報を一時格納
+        CsvReader("Questions");//enemyDataへ情報を一時格納
         //各変数へデータを格納
         for (int i = 1; i < csvDatas.Count; i++)//エネミーIDが記述された最後まで読み込み。一行目はタイトルなのでi=0はデータとして扱わない
         {
-            
+            /*
             Question[i] = csvDatas[i][0];
             Options1[i] = csvDatas[i][1];
             Options2[i] = csvDatas[i][2];
             Options3[i] = csvDatas[i][3];
-            Answer[i] = csvDatas[i][4];  
+            Answer[i] = csvDatas[i][4];
+            */
+
+            Id[i] = csvDatas[i][0];
+            Option[i] = csvDatas[i][1];
+            MissionId[i] = csvDatas[i][2];
+            AnserRank[i] = csvDatas[i][3];
+            Score[i] = csvDatas[i][4];
         }
     }
 
-    public void Reset()
+    public void Reset(List<string[]> csvData)
     {
-        csvDatas.Clear();
+        csvData.Clear();
     }
 }

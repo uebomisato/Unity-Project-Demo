@@ -34,7 +34,7 @@ public class ReadCSVSceneManager : MonoBehaviour
     public void init()
     {
         questionsInfomation = new QuestionsInfomation();
-        questionsInfomation.Init();
+        questionsInfomation.QuestionInit();
     }
 
     public void GetQuestion()
@@ -51,10 +51,12 @@ public class ReadCSVSceneManager : MonoBehaviour
             loop = false;
         }
 
+        /*
         QuestionsText.text = "問題 : " + questionsInfomation.Question[now_index];
         options1.text = "選択肢1 : " + questionsInfomation.Options1[now_index];
         options2.text = "選択肢2 : " + questionsInfomation.Options2[now_index];
         options3.text = "選択肢3 : " + questionsInfomation.Options3[now_index];
         Answer.text = "答え : " + questionsInfomation.Answer[now_index];
+        */
     }
 }
